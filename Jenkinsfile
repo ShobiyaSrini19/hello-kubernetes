@@ -6,6 +6,14 @@ pipeline {
     }
     
     stages {
+stage('Unit Test') {
+            steps {
+                echo "Running Python Tests..."
+                bat """
+                C:\\Windows\\System32\\wsl.exe bash -c "cd ~/hello-app && pytest test_app.py"
+                """
+            }
+        }
         stage('Docker Build & Push') {
             steps {
                 echo "Logging into Docker Hub and pushing image..."
