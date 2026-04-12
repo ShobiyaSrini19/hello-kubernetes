@@ -1,4 +1,12 @@
-pipeline {
+stage('K8s Deploy') {
+            steps {
+                echo "Deploying the new image to Kubernetes..."
+                // Updated with 'my-python-app' instead of 'python-deployment'
+                bat """
+                C:\\Windows\\System32\\wsl.exe bash -c "kubectl set image deployment/python-deployment my-python-app=shobiyasrinid14/hello-app:latest"
+                """
+            }
+        }pipeline {
     agent any
     
     environment {
