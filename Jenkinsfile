@@ -20,7 +20,8 @@ pipeline {
                     // We remove the C:\Windows\System32\wsl.exe bash -c part
                     bat """
                     docker login -u ${DOCKER_USER} -p ${DOCKER_PASS}
-                    docker build -t ${DOCKER_ID}/hello-app:latest .
+                    // Change the build line in your Jenkinsfile to this:
+docker build -t ${DOCKER_ID}/hello-app:latest . --build-arg CACHEBUST=$(date +%s)
                     docker push ${DOCKER_ID}/hello-app:latest
                     """
                 }
