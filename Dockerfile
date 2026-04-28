@@ -13,7 +13,7 @@ RUN npm install --include=dev
 COPY . .
 
 # 4. Build the project
-RUN npm run build
+RUN npm vite build
 
 # Stage 2: Serve
 FROM nginx:alpine
