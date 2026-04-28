@@ -18,10 +18,10 @@ pipeline {
         script {
             // This ensures if the build fails, the pipeline kills itself here
             bat "docker build -t shobiyasrinid14/hello-app:latest ."
-            withCredentials([string(credentialsId: 'docker-hub-creds', variable: 'DOCKER_PASS')]) {
-                bat "docker login -u shobiyasrinid14 -p %DOCKER_PASS%"
-                bat "docker push shobiyasrinid14/hello-app:latest"
-            }
+            withCredentials([usernamePassword(credentialsId: 'docker-hub-creds', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PWD')]) {
+    bat "docker login -u ${DOCKER_USER} -p ${DOCKER_PWD}"
+    bat "docker push shobiyasrinid14/hello-app:latest"
+}
         }
     }
 }
