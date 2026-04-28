@@ -27,13 +27,21 @@ pipeline {
         }
         
         stage('K8s Deploy') {
-            steps {
-                echo "Deploying to Kubernetes..."
-                bat """
-                kubectl apply -f k8s-spec/
-                kubectl rollout restart deployment/hello-app-deployment || echo "First time deploy"
-                """
-            }
-        }
+    steps {
+        echo "Deploying to Kubernetes..."
+        bat """
+        @echo off
+        echo Checking directory content:
+        dir
+        kubectl apply -f .\\k8s-spec\\ --validate=false
+        kubectl rollout restart deployment/hello-app-deployment || echo "First deploy"
+        """
+    }
+}
+        stage('Integration Test') {
+    steps {
+        bat "docker-compose up --exit-code-from test"
+    }
+}
     }
 }
