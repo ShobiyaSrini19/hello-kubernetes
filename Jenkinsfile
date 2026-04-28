@@ -29,9 +29,8 @@ pipeline {
         stage('K8s Deploy') {
     steps {
         echo "Deploying to Kubernetes..."
-        // Use '.' to tell kubectl to look in the current Jenkins workspace folder
         bat """
-        C:\\Windows\\System32\\wsl.exe bash -c "kubectl apply -f ./k8s-spec/ || kubectl rollout restart deployment/python-deployment"
+        C:\\Windows\\System32\\wsl.exe bash -c "kubectl apply -f /mnt/c/ProgramData/Jenkins/.jenkins/workspace/first/k8s-spec/ || kubectl rollout restart deployment/python-deployment"
         """
     }
 }

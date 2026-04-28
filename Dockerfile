@@ -2,7 +2,7 @@
 FROM node:20-alpine as build-stage
 WORKDIR /app
 COPY package*.json ./
-RUN npm install --no-audit --no-fund --loglevel=error
+RUN npm install --include=dev --no-audit --no-fund
 COPY . .
 RUN npm run build
 
