@@ -1,23 +1,35 @@
-services:
-  backend:
-    build: ./backend
-    depends_on:
-      - mongo
-    environment:
-      - MONGO_URI=mongodb://mongo:27017/taskdb
-
-  mongo:
-    image: mongo
-    restart: always
-    volumes:
-      - mongo-data:/data/db
-
-  test:
-    build: ./tests
-    command: npm test
-    depends_on:
-      - backend
-      - mongo
-
-volumes:
-  mongo-data:
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hello-app-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: hello-app
+  template:
+    metadata:
+      labels:
+        app: hello-app
+    spec:
+      containers:
+      - name: backend
+        image: shobiyasrinid14/hello-app:latest # Your pushed image
+        ports:
+        - containerPort: 80
+        env:
+        - name: MONGO_URI
+          value: "mongodb://mongo-service:27017/taskdb"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: hello-app-service
+spec:
+  type: NodePort
+  selector:
+    app: hello-app
+  ports:
+    - port: 80
+      targetPort: 80
+      nodePort: 30001

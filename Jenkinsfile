@@ -31,10 +31,9 @@ pipeline {
         echo "Deploying to Kubernetes..."
         bat """
         @echo off
-        echo Checking directory content:
-        dir
-        kubectl apply -f .\\k8s-spec\\ --validate=false
-        kubectl rollout restart deployment/hello-app-deployment || echo "First deploy"
+        :: This ensures we apply the folder we just created
+        kubectl apply -f k8s-spec\\ --validate=false
+        kubectl rollout restart deployment/hello-app-deployment || echo "Initial deployment"
         """
     }
 }
