@@ -27,12 +27,13 @@ pipeline {
         }
         
         stage('K8s Deploy') {
-    steps {
-        echo "Deploying to Kubernetes..."
-        bat """
-        C:\\Windows\\System32\\wsl.exe bash -c "kubectl apply -f /mnt/c/ProgramData/Jenkins/.jenkins/workspace/first/k8s-spec/ || kubectl rollout restart deployment/python-deployment"
-        """
-    }
-}
+            steps {
+                echo "Deploying to Kubernetes..."
+                bat """
+                kubectl apply -f k8s-spec/
+                kubectl rollout restart deployment/hello-app-deployment || echo "First time deploy"
+                """
+            }
+        }
     }
 }
