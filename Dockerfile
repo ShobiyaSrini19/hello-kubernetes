@@ -2,17 +2,20 @@
 FROM node:20-alpine AS build-stage
 WORKDIR /app
 
-# Copy both package files
+# Copy package files
 COPY package*.json ./
 
-# Force install EVERYTHING including devDependencies
-RUN npm install 
+# Install dependencies
+RUN npm install
+
+# Copy the rest of the source code
 COPY . .
 
-# Use npx to find vite even if the path is wonky
-RUN ./node_modules/.bin/vite build
+# Use 'npm run build' instead of calling the binary directly
+# (Make sure your package.json has a "build": "vite build" script)
+RUN npm run build
 
-# Stage 2: Serve
+# Stage 2: Serve with Nginx
 FROM nginx:alpine
 COPY --from=build-stage /app/dist /usr/share/nginx/html
 EXPOSE 80

@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: hello-app-service
+spec:
+  # NodePort makes the app accessible on your machine's IP
+  type: NodePort 
+  selector:
+    # This MUST match the label 'app: hello-app' in your deployment.yaml
+    app: hello-app 
+  ports:
+    - protocol: TCP
+      port: 80         # The port the service listens on inside the cluster
+      targetPort: 80   # The port your Nginx container is listening on
+      nodePort: 30001  # The port you will type into your browser (range 30000-32767)

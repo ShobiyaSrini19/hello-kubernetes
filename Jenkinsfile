@@ -31,9 +31,9 @@ pipeline {
         echo "Deploying to Kubernetes..."
         bat """
         @echo off
-        :: This ensures we apply the folder we just created
+        :: Apply the whole folder
         kubectl apply -f k8s-spec\\ --validate=false
-        kubectl rollout restart deployment/hello-app-deployment || echo "Initial deployment"
+        kubectl rollout restart deployment/hello-app-deployment || echo "Fresh deployment"
         """
     }
 }
