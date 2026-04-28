@@ -15,13 +15,13 @@ pipeline {
 
         stage('Docker Build & Push') {
             steps {
-                echo "Logging into Docker Hub and pushing React Frontend image..."
+                echo "Building directly on Windows to bypass WSL network issues..."
                 withCredentials([usernamePassword(credentialsId: 'docker-hub-creds', passwordVariable: 'DOCKER_PASS', usernameVariable: 'DOCKER_USER')]) {
+                    // We remove the C:\Windows\System32\wsl.exe bash -c part
                     bat """
-                    C:\\Windows\\System32\\wsl.exe bash -c "docker login -u ${DOCKER_USER} -p ${DOCKER_PASS} && \
-                    cd ~/hello-app && \
-                    docker build -t ${DOCKER_ID}/hello-app:latest . && \
-                    docker push ${DOCKER_ID}/hello-app:latest"
+                    docker login -u ${DOCKER_USER} -p ${DOCKER_PASS}
+                    docker build -t ${DOCKER_ID}/hello-app:latest .
+                    docker push ${DOCKER_ID}/hello-app:latest
                     """
                 }
             }
