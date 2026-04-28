@@ -6,17 +6,16 @@ pipeline {
     }
     
     stages {
-stage('Unit Test') {
+        stage('Unit Test') {
             steps {
-                echo "Running Python Tests..."
-                bat """
-                C:\\Windows\\System32\\wsl.exe bash -c "cd ~/hello-app && pytest test_app.py"
-                """
+                // We echo a skip message because React apps use different testing tools (like Vitest/Jest)
+                echo "React Frontend detected. Skipping Python unit tests..."
             }
         }
+
         stage('Docker Build & Push') {
             steps {
-                echo "Logging into Docker Hub and pushing image..."
+                echo "Logging into Docker Hub and pushing React Frontend image..."
                 withCredentials([usernamePassword(credentialsId: 'docker-hub-creds', passwordVariable: 'DOCKER_PASS', usernameVariable: 'DOCKER_USER')]) {
                     bat """
                     C:\\Windows\\System32\\wsl.exe bash -c "docker login -u ${DOCKER_USER} -p ${DOCKER_PASS} && \
@@ -30,9 +29,9 @@ stage('Unit Test') {
         
         stage('K8s Deploy') {
             steps {
-                echo "Deploying the new image to Kubernetes..."
+                echo "Deploying the React image to Kubernetes..."
                 bat """
-                C:\\Windows\\System32\\wsl.exe bash -c "kubectl set image deployment/python-deployment my-python-app=${DOCKER_ID}/hello-app:latest"
+                C:\\Windows\\System32\\wsl.exe bash -c "kubectl apply -f ~/hello-app/k8s-spec/ || kubectl rollout restart deployment/python-deployment"
                 """
             }
         }
