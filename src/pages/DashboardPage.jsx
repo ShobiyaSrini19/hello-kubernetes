@@ -39,7 +39,7 @@ function DashboardPage() {
 
       setTasks(normalizedTasks);
     } catch (err) {
-      setError('Unable to load tasks. Please try again.🥴🤧🤧🤧🤧🤧');
+      setError('Unable to load tasks. Please try again.🥴🤧🤧🤧');
       setTasks([]);
     } finally {
       setLoading(false);
